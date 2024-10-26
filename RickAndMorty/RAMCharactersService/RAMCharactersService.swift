@@ -10,13 +10,13 @@ import Combine
 
 //MARK: Service
 public protocol RAMCharactersServiceProtocol {
-    func fetchCharacters() -> AnyPublisher<GetAllCharactersResponse, Error>
+    func fetchCharacters(page: Int?, name: String?) -> AnyPublisher<GetAllCharactersResponse, Error>
 }
 
 public final class RAMCharactersService: RAMCharactersServiceProtocol {
     let apiClient = URLSessionAPIClient<RickAndMortyEndpoint>()
     
-    public func fetchCharacters() -> AnyPublisher<GetAllCharactersResponse, any Error> {
-        return apiClient.request(.getAllCharacters)
+    public func fetchCharacters(page: Int?, name: String?) -> AnyPublisher<GetAllCharactersResponse, any Error> {
+        return apiClient.request(.getAllCharacters(page: page, name: name))
     }
 }

@@ -27,9 +27,66 @@ final class RAMCharactersViewModelTests: XCTestCase {
         
         let expectation = XCTestExpectation(description: "Wait for cities to be fetched")
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             XCTAssertFalse(self.sut.characters.isEmpty)
             XCTAssertNotEqual(self.sut.characters.count, 0)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5)
+    }
+    
+    func testFetchingSecondPage() throws {
+        XCTAssertTrue(sut.characters.isEmpty)
+        
+        sut.setCharacters()
+        
+        let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            XCTAssertFalse(self.sut.characters.isEmpty)
+            XCTAssertNotEqual(self.sut.characters.count, 0)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5)
+        
+        let expectation2 = XCTestExpectation(description: "Wait for characters to be fetched")
+        
+        sut.setNextPageIfExists()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            XCTAssertEqual(self.sut.currentPage, 2)
+            expectation2.fulfill()
+        }
+        
+        wait(for: [expectation2], timeout: 5)
+    }
+    
+    func testSearchingByNameOKResponse() throws {
+        let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
+        
+        sut.searchString = "Rick"
+        sut.searchCharacters()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            XCTAssertFalse(self.sut.characters.isEmpty)
+            XCTAssertTrue(self.sut.characters.first!.name.contains("Rick"))
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5)
+    }
+    
+    func testSearchingByNameBadResponse() throws {
+        let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
+        
+        sut.searchString = "Rick"
+        sut.searchCharacters()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            XCTAssertFalse(self.sut.characters.isEmpty)
+            XCTAssertFalse(self.sut.characters.first!.name.contains("Morty"))
             expectation.fulfill()
         }
         

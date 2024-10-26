@@ -29,10 +29,17 @@ enum APIError: Error {
 }
 
 enum RickAndMortyEndpoint: APIEndpoint {
-    case getAllCharacters
+    case getAllCharacters(page: Int?, name: String?)
     
     var baseURL: URL {
-        return URL(string: "https://rickandmortyapi.com")!
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "rickandmortyapi.com"
+        components.path = path
+        if let params = parameters {
+            components.queryItems = params.map( { URLQueryItem(name: $0.key, value: "\($0.value)" ) } )
+        }
+        return components.url!
     }
     
     var path: String {
@@ -43,5 +50,17 @@ enum RickAndMortyEndpoint: APIEndpoint {
     
     var headers: [String : String]? { nil }
     
-    var parameters: [String : Any]? { nil }
+    var parameters: [String : Any]? {
+        switch self {
+        case .getAllCharacters(let page, let name):
+            var parameters: [String: Any] = [:]
+            if let page = page {
+                parameters["page"] = page
+            }
+            if let name = name {
+                parameters["name"] = name
+            }
+            return parameters
+        }
+    }
 }

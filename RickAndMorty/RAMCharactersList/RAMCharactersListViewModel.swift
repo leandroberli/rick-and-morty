@@ -5,27 +5,84 @@
 //  Created by Leandro Berli on 25/10/2024.
 //
 import Foundation
+import Combine
 
 final class RAMCharactersListViewModel: ObservableObject {
+    private var cancellables = Set<AnyCancellable>()
     @Published public var characters: [Character] = []
+    @Published public var searchString: String = ""
+    private var prevSearchString: String = ""
     private var charactersService: RAMCharactersServiceProtocol
+    private var response: GetAllCharactersResponse?
+    var currentPage = 1
     
-    init(characters: [Character] = [],
-         charactersService: RAMCharactersServiceProtocol = RAMCharactersService()) {
-        self.characters = characters
+    init(charactersService: RAMCharactersServiceProtocol = RAMCharactersService()) {
         self.charactersService = charactersService
+        
+        bindSearchText()
     }
     
-    public func setCharacters() {
-        charactersService.fetchCharacters()
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { _ in
-            }, receiveValue: { [weak self] response in
+    private func bindSearchText() {
+        $searchString
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .sink(receiveValue: { [weak self] searchString in
                 guard let self = self else {
                     return
                 }
+                self.searchCharacters()
+            })
+            .store(in: &cancellables)
+    }
+    
+    public func setCharacters() {
+        
+        fetchCharacters(handleResponseBlock: { [weak self] response in
+            guard let self = self else {
+                return
+            }
+            self.response = response
+            self.characters = response.results
+        })
+    }
+    
+    public func setNextPageIfExists() {
+        print(#function)
+        guard let response = response, currentPage < response.info.pages else {
+            return
+        }
+        currentPage += 1
+        fetchCharacters(handleResponseBlock: { [weak self] newPageResponse in
+            guard let self = self else { return }
+            self.response = newPageResponse
+            self.characters.append(contentsOf: newPageResponse.results)
+        })
+    }
+    
+    public func searchCharacters() {
+        print(#function)
+        if searchString != self.prevSearchString {
+            self.prevSearchString = searchString
+            self.currentPage = 1
+            self.response = nil
+            self.searchCharacters()
+            fetchCharacters(handleResponseBlock: { [weak self] response in
+                guard let self = self else { return }
+                self.prevSearchString = self.searchString
+                self.response = response
                 self.characters = response.results
             })
+        }
+    }
+    
+    private func fetchCharacters(handleResponseBlock: @escaping (GetAllCharactersResponse) -> Void) {
+        charactersService.fetchCharacters(page: currentPage, name: searchString)
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] newPageResponse in
+                guard let self = self else { return }
+                
+                handleResponseBlock(newPageResponse)
+            })
+            .store(in: &cancellables)
     }
 }
 
