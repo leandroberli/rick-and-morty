@@ -13,7 +13,15 @@ struct RAMCHaractersListView: View {
     @State var searchText: String = ""
     
     var columns: [GridItem] {
-        [GridItem(.flexible()), GridItem(.flexible())]
+        [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)]
+    }
+    
+    var itemWidth: CGFloat {
+        UIScreen.main.bounds.width / 2 - 16
+    }
+    
+    var itemHeight: CGFloat {
+        (UIScreen.main.bounds.height - 44 - 20) / 3.5
     }
     
     var body: some View {
@@ -45,12 +53,14 @@ struct RAMCHaractersListView: View {
                             }
                             .padding([.leading, .bottom, .trailing],8)
                         }
+                        .frame(width: itemWidth, height: itemHeight)
                         .onAppear {
                             if character.id == viewModel.characters.last?.id {
                                 viewModel.setNextPageIfExists()
                             }
                         }
                         .border(.gray)
+                        .clipped()
                     }
                 }
                 .padding([.leading, .bottom, .trailing])

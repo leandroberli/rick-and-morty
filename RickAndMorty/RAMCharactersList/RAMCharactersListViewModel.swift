@@ -35,7 +35,6 @@ final class RAMCharactersListViewModel: ObservableObject {
     }
     
     public func setCharacters() {
-        
         fetchCharacters(handleResponseBlock: { [weak self] response in
             guard let self = self else {
                 return
@@ -77,9 +76,7 @@ final class RAMCharactersListViewModel: ObservableObject {
     private func fetchCharacters(handleResponseBlock: @escaping (GetAllCharactersResponse) -> Void) {
         charactersService.fetchCharacters(page: currentPage, name: searchString)
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] newPageResponse in
-                guard let self = self else { return }
-                
+            .sink(receiveCompletion: { _ in }, receiveValue: { newPageResponse in
                 handleResponseBlock(newPageResponse)
             })
             .store(in: &cancellables)
