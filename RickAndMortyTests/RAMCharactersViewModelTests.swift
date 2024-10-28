@@ -7,16 +7,43 @@
 
 import XCTest
 @testable import RickAndMorty
+import Combine
+
+public final class MockRAMCharactersService: RAMCharactersServiceProtocol {
+    let mockedData: GetAllCharactersResponse = loadJson(filename: "charactersResponse")!
+    public func fetchCharacters(page: Int?, name: String?) -> AnyPublisher<GetAllCharactersResponse, any Error> {
+        return Just(mockedData)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+    }
+}
+
+func loadJson(filename fileName: String) -> GetAllCharactersResponse? {
+    let bundle = Bundle(for: RAMCharactersViewModelTests.self)
+    let path = bundle.path(forResource: fileName, ofType: "json")
+    do {
+        let data = try Data(contentsOf: URL(fileURLWithPath: path ?? ""))
+        let decoder = JSONDecoder()
+        let jsonData = try decoder.decode(GetAllCharactersResponse.self, from: data)
+        return jsonData
+    } catch {
+        return nil
+    }
+}
+
 
 final class RAMCharactersViewModelTests: XCTestCase {
     
     var sut: RAMCharactersListViewModel!
+    var mockCharactersService: MockRAMCharactersService!
     
     override func setUpWithError() throws {
-        sut = RAMCharactersListViewModel()
+        mockCharactersService = MockRAMCharactersService()
+        sut = RAMCharactersListViewModel(charactersService: mockCharactersService)
     }
     
     override func tearDownWithError() throws {
+        mockCharactersService = nil
         sut = nil
     }
     

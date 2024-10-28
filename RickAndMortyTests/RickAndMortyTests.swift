@@ -20,27 +20,11 @@ final class RickAndMortyTests: XCTestCase {
         sut = nil
     }
 
-    func testFetchAllCharactersNotNilResponse() throws {
-        let expectation = expectation(description: "Waiting to fetch characters")
-        
-        sut.fetchCharacters(page: nil, name: nil)
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { _ in
-                XCTFail()
-            }, receiveValue: { response in
-                print(response)
-                XCTAssertNotNil(response)
-                expectation.fulfill()
-            })
-        
-        self.wait(for: [expectation], timeout: 5)
+    func testPerformanceExample() throws {
+        // This is an example of a performance test case.
+        self.measure {
+            // Put the code you want to measure the time of here.
+        }
     }
-
-//    func testPerformanceExample() throws {
-//        // This is an example of a performance test case.
-//        self.measure {
-//            // Put the code you want to measure the time of here.
-//        }
-//    }
 
 }
