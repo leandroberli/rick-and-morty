@@ -59,12 +59,8 @@ final class RAMCharactersListViewModel: ObservableObject {
     }
     
     public func searchCharacters() {
-        print(#function)
-        if searchString != self.prevSearchString {
-            self.prevSearchString = searchString
-            self.currentPage = 1
-            self.response = nil
-            self.searchCharacters()
+        if searchString != prevSearchString {
+            resetToNewSearch()
             fetchCharacters(handleResponseBlock: { [weak self] response in
                 guard let self = self else { return }
                 self.prevSearchString = self.searchString
@@ -74,18 +70,26 @@ final class RAMCharactersListViewModel: ObservableObject {
         }
     }
     
+    private func resetToNewSearch() {
+        self.prevSearchString = searchString
+        self.currentPage = 1
+        self.response = nil
+    }
+    
     private func fetchCharacters(handleResponseBlock: @escaping (GetAllCharactersResponse) -> Void) {
         charactersService.fetchCharacters(page: currentPage, name: searchString)
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { result in
+            .sink(receiveCompletion: { [weak self] result in
+                guard let self = self else { return }
                 switch result {
                 case .finished:
-                    print("Finished")
+                    break
                 case .failure(let failure):
                     self.noSearchResults = true
                     print(failure.localizedDescription)
                 }
-            }, receiveValue: { newPageResponse in
+            }, receiveValue: { [weak self] newPageResponse in
+                guard let self = self else { return }
                 handleResponseBlock(newPageResponse)
                 self.noSearchResults = false
             })
