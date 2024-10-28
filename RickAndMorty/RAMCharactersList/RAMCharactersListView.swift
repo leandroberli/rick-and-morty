@@ -9,7 +9,6 @@ import SwiftUI
 
 struct RAMCHaractersListView: View {
     @StateObject var viewModel: RAMCharactersListViewModel = RAMCharactersListViewModel()
-    
     @State var searchText: String = ""
     
     var columns: [GridItem] {
@@ -27,50 +26,68 @@ struct RAMCHaractersListView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 8) {
-                    ForEach(viewModel.characters, id: \.self) { character in
-                        VStack(alignment: .leading, spacing: 8) {
-                            AsyncCachedImage(url: URL(string: character.image)) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            } placeholder: {
-                                Image(systemName: "photo")
-                                    .imageScale(.large)
-                                    .frame(width: 110, height: 110)
-                            }
-                            VStack(alignment: .leading, spacing: 0) {
-                                HStack {
-                                    Text(character.name)
-                                        .font(.system(size: 16, weight: .semibold))
-                                        .lineLimit(1)
-                                    Spacer()
-                                    Text(character.status)
-                                        .font(.system(size: 12, weight: .regular))
+                if !viewModel.noSearchResults {
+                    LazyVGrid(columns: columns, spacing: 8) {
+                        ForEach(viewModel.characters, id: \.self) { character in
+                            NavigationLink(destination: {
+                                RAMCharacterDetailView(character: character)
+                            }, label: {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    AsyncCachedImage(url: URL(string: character.image)) { image in
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                    } placeholder: {
+                                        Image(systemName: "photo")
+                                            .imageScale(.large)
+                                            .frame(width: 110, height: 110)
+                                    }
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        HStack {
+                                            Text(character.name)
+                                                .font(.system(size: 16, weight: .semibold))
+                                                .lineLimit(1)
+                                            Spacer()
+                                            Text(character.status.rawValue)
+                                                .font(.system(size: 12, weight: .regular))
+                                                .foregroundStyle(character.status.labelColor)
+                                        }
+                                        Text(character.species)
+                                            .font(.system(size: 12, weight: .regular))
+                                            .foregroundStyle(Color(uiColor: .secondaryLabel))
+                                    }
+                                    .padding([.leading, .bottom, .trailing], 8)
                                 }
-                                Text(character.species)
-                                    .font(.system(size: 12, weight: .regular))
-                            }
-                            .padding([.leading, .bottom, .trailing],8)
+                                .frame(width: itemWidth, height: itemHeight)
+                                .onAppear {
+                                    if character.id == viewModel.characters.last?.id {
+                                        viewModel.setNextPageIfExists()
+                                    }
+                                }
+                                .clipped()
+                            })
+                            .buttonStyle(.plain)
+                            .background(Color(uiColor: .secondarySystemGroupedBackground))
+                            .cornerRadius(8)
                         }
-                        .frame(width: itemWidth, height: itemHeight)
-                        .onAppear {
-                            if character.id == viewModel.characters.last?.id {
-                                viewModel.setNextPageIfExists()
-                            }
-                        }
-                        .border(.gray)
-                        .clipped()
+                    }
+                    .padding([.leading, .bottom, .trailing])
+
+                } else {
+                    VStack {
+                        Text("There is no results for the given name")
+                            .font(.system(size: 14, weight: .regular))
+                            .padding(.top, 32)
                     }
                 }
-                .padding([.leading, .bottom, .trailing])
-            }
+                            }
             .navigationTitle("Characters")
-            .searchable(text: $viewModel.searchString)
+            .searchable(text: $viewModel.searchString , prompt: Text("Type name"))
         }
         .onAppear {
             viewModel.setCharacters()
         }
+        .accentColor(Color(uiColor: .label))
     }
 }
 

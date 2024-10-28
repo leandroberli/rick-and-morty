@@ -11,6 +11,7 @@ final class RAMCharactersListViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     @Published public var characters: [Character] = []
     @Published public var searchString: String = ""
+    @Published var noSearchResults: Bool = false
     private var prevSearchString: String = ""
     private var charactersService: RAMCharactersServiceProtocol
     private var response: GetAllCharactersResponse?
@@ -76,8 +77,17 @@ final class RAMCharactersListViewModel: ObservableObject {
     private func fetchCharacters(handleResponseBlock: @escaping (GetAllCharactersResponse) -> Void) {
         charactersService.fetchCharacters(page: currentPage, name: searchString)
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { _ in }, receiveValue: { newPageResponse in
+            .sink(receiveCompletion: { result in
+                switch result {
+                case .finished:
+                    print("Finished")
+                case .failure(let failure):
+                    self.noSearchResults = true
+                    print(failure.localizedDescription)
+                }
+            }, receiveValue: { newPageResponse in
                 handleResponseBlock(newPageResponse)
+                self.noSearchResults = false
             })
             .store(in: &cancellables)
     }
