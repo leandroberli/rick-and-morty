@@ -15,8 +15,8 @@ jobs:
       - name: Build and Test
         run: |
           xcodebuild \
-           -project [name_of_your_project] \
-           -scheme [your_scheme] \
+           -project RickAndMorty.xcodeproj \
+           -scheme RickAndMorty \
            -sdk iphonesimulator \
-           -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' \
+           -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
             test || exit 1
