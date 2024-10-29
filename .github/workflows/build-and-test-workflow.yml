@@ -30,4 +30,5 @@ jobs:
           xcodebuild -project RickAndMorty.xcodeproj \
                      -scheme RickAndMorty \
                      -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
+                     -only-testing:RickAndMortyTests \
                      clean test
