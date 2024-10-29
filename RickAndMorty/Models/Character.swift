@@ -6,6 +6,21 @@
 //
 import SwiftUI
 
+public struct Character: Codable, Hashable {
+    let id: Int
+    let name: String
+    let image: String
+    let status: CharcaterStatus //"Alive"
+    let species: String //"Human"
+    let gender: String
+    let episode: [String]
+    
+    var episodeToString: String {
+        let episodeNumbers = episode.map( { $0.replacingOccurrences(of: "https://rickandmortyapi.com/api/episode/", with: "")  })
+        return episodeNumbers.joined(separator: ", ")
+    }
+}
+
 public enum CharcaterStatus: String, Codable {
     case alive = "Alive"
     case dead = "Dead"
@@ -31,21 +46,6 @@ public enum CharcaterStatus: String, Codable {
         case .unknown:
             return .yellow
         }
-    }
-}
-
-public struct Character: Codable, Hashable {
-    let id: Int
-    let name: String
-    let image: String
-    let status: CharcaterStatus //"Alive"
-    let species: String //"Human"
-    let gender: String
-    let episode: [String]
-    
-    var episodeToString: String {
-        let episodeNumbers = episode.map( { $0.replacingOccurrences(of: "https://rickandmortyapi.com/api/episode/", with: "")  })
-        return episodeNumbers.joined(separator: ", ")
     }
 }
 
