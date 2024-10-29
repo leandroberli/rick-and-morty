@@ -30,7 +30,10 @@ struct RAMCHaractersListView: View {
                     LazyVGrid(columns: columns, spacing: 8) {
                         ForEach(viewModel.characters, id: \.self) { character in
                             NavigationLink(destination: {
-                                RAMCharacterDetailView(character: character.data)
+                                //TODO: See how to improve this initialization
+                                if let charIndex = viewModel.characters.firstIndex(of: character) {
+                                    RAMCharacterDetailView(character: $viewModel.characters[charIndex])
+                                }
                             }, label: {
                                 characterGridItemView(character: character.data)
                                     .onAppear {
@@ -59,7 +62,7 @@ struct RAMCHaractersListView: View {
     }
     
     private func characterGridItemView(character: Character) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             AsyncCachedImage(url: URL(string: character.image)) { image in
                 image
                     .resizable()
@@ -70,7 +73,7 @@ struct RAMCHaractersListView: View {
                     .frame(width: 110, height: 110)
             }
             VStack(alignment: .leading, spacing: 0) {
-                HStack {
+                HStack(alignment: .center) {
                     Text(character.name)
                         .font(.system(size: 16, weight: .semibold))
                         .lineLimit(2)
@@ -82,11 +85,9 @@ struct RAMCHaractersListView: View {
                     })
                     .tint(.green)
                 }
-//                Text(character.species)
-//                    .font(.system(size: 12, weight: .regular))
-//                    .foregroundStyle(Color(uiColor: .secondaryLabel))
             }
-            .padding([.leading, .bottom, .trailing], 8)
+            .padding([.leading, .trailing], 8)
+            .padding(.bottom, 12)
         }
         .frame(width: itemWidth, height: itemHeight)
         .clipped()

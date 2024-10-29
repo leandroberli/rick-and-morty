@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RAMCharacterDetailView: View {
+    
     enum DetailSection {
         case status
         case specie
@@ -24,7 +25,7 @@ struct RAMCharacterDetailView: View {
         }
     }
     
-    @State var character: Character
+    @Binding var character: FavoritableCharacter
     let informationItemTitles: [DetailSection] = [.status, .specie, .gender, .episodes ]
     
     var body: some View {
@@ -32,10 +33,12 @@ struct RAMCharacterDetailView: View {
             VStack(alignment: .leading) {
                 ZStack(alignment: .bottomLeading) {
                     characterImageView
-                    Rectangle()
-                        .foregroundColor(.clear)
-                        .background(LinearGradient(gradient: Gradient(colors: [.clear, .black]), startPoint: .top, endPoint: .bottom))
-                    titleText
+                    gradientOverlayView
+                    HStack(alignment: .center, spacing: 0) {
+                        titleText
+                        Spacer()
+                        favoriteButtonView
+                    }
                 }
                 Spacer()
                     .frame(height: 16)
@@ -46,23 +49,42 @@ struct RAMCharacterDetailView: View {
         }
     }
     
+    private var gradientOverlayView: some View {
+        Rectangle()
+            .foregroundColor(.clear)
+            .background(LinearGradient(gradient: Gradient(colors: [.clear, .black]), startPoint: .top, endPoint: .bottom))
+    }
+    
+    private var favoriteButtonView: some View {
+        Button(action: {
+            character.isFavorite = !character.isFavorite
+        }, label: {
+            Image(systemName: character.isFavorite ? "heart.fill" : "heart")
+                .resizable()
+                .frame(width: 24, height: 24)
+        })
+        .tint(.green)
+        .padding(.trailing, 16)
+        .padding([.leading], 8)
+        .padding(.top, 2)
+    }
+    
     private var characterImageView: some View {
-        AsyncCachedImage(url: URL(string: character.image)) { image in
+        AsyncCachedImage(url: URL(string: character.data.image)) { image in
             image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
         } placeholder: {
             Image(systemName: "photo")
                 .imageScale(.large)
-            
         }
     }
     
     private var titleText: some View {
-        Text(character.name)
+        Text(character.data.name)
             .font(.system(size: 36, weight: .semibold))
             .foregroundStyle(.white)
-            .padding()
+            .padding([.leading], 16)
     }
     
     private var characterDetailsView: some View {
@@ -75,17 +97,17 @@ struct RAMCharacterDetailView: View {
                     .frame(height: 4)
                 switch item {
                 case .status:
-                    Text(character.status.textLabel)
-                        .foregroundStyle(character.status.labelColor)
+                    Text(character.data.status.textLabel)
+                        .foregroundStyle(character.data.status.labelColor)
                         .font(.system(size: 16, weight: .medium))
                 case .specie:
-                    Text(character.species)
+                    Text(character.data.species)
                         .font(.system(size: 16, weight: .medium))
                 case .gender:
-                    Text(character.gender)
+                    Text(character.data.gender)
                         .font(.system(size: 16, weight: .medium))
                 case .episodes:
-                    Text(character.episodeToString)
+                    Text(character.data.episodeToString)
                         .font(.system(size: 16, weight: .medium))
                 }
             }
