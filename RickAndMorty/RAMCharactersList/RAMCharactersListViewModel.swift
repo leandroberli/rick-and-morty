@@ -19,7 +19,6 @@ final class RAMCharactersListViewModel: ObservableObject {
     
     init(charactersService: RAMCharactersServiceProtocol = RAMCharactersService()) {
         self.charactersService = charactersService
-        
         bindSearchText()
     }
     
@@ -46,7 +45,6 @@ final class RAMCharactersListViewModel: ObservableObject {
     }
     
     public func setNextPageIfExists() {
-        print(#function)
         guard let response = response, currentPage < response.info.pages else {
             return
         }

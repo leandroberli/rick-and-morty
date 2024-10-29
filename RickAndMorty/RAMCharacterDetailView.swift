@@ -32,8 +32,8 @@ struct RAMCharacterDetailView: View {
             VStack(alignment: .leading) {
                 ZStack(alignment: .bottomLeading) {
                     characterImageView
-                    Rectangle()                         // Shapes are resizable by default
-                        .foregroundColor(.clear)        // Making rectangle transparent
+                    Rectangle()
+                        .foregroundColor(.clear)
                         .background(LinearGradient(gradient: Gradient(colors: [.clear, .black]), startPoint: .top, endPoint: .bottom))
                     titleText
                 }
@@ -54,7 +54,7 @@ struct RAMCharacterDetailView: View {
         } placeholder: {
             Image(systemName: "photo")
                 .imageScale(.large)
-                
+            
         }
     }
     
@@ -86,7 +86,7 @@ struct RAMCharacterDetailView: View {
                         .font(.system(size: 16, weight: .medium))
                 case .episodes:
                     Text(character.episodeToString)
-                    .font(.system(size: 16, weight: .medium))
+                        .font(.system(size: 16, weight: .medium))
                 }
             }
             .padding(.bottom, 8)

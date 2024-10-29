@@ -45,7 +45,6 @@ struct RAMCHaractersListView: View {
                         }
                     }
                     .padding([.leading, .bottom, .trailing])
-
                 } else {
                     noSearchResultsView
                 }
