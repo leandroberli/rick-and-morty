@@ -28,6 +28,6 @@ jobs:
       - name: Build and test
         run: |
           xcodebuild -project RickAndMorty.xcodeproj \
-                     -scheme TestCICD \
+                     -scheme RickAndMorty \
                      -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
                      clean test
