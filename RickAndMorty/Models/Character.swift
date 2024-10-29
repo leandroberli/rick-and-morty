@@ -19,7 +19,7 @@ public struct Character: Codable, Hashable {
         let episodeNumbers = episode.map( { $0.replacingOccurrences(of: "https://rickandmortyapi.com/api/episode/", with: "")  })
         return episodeNumbers.joined(separator: ", ")
     }
-    
+
     var idString: String {
         String(id)
     }
