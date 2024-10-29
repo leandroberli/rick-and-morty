@@ -50,7 +50,7 @@ final class RAMCharactersViewModelTests: XCTestCase {
     func testSetInitiallyLoadedCharacters() throws {
         XCTAssertTrue(sut.characters.isEmpty)
         
-        sut.setCharacters()
+        sut.setCharactersFirstPage()
         
         let expectation = XCTestExpectation(description: "Wait for cities to be fetched")
         
@@ -66,7 +66,7 @@ final class RAMCharactersViewModelTests: XCTestCase {
     func testFetchingSecondPage() throws {
         XCTAssertTrue(sut.characters.isEmpty)
         
-        sut.setCharacters()
+        sut.setCharactersFirstPage()
         
         let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
         
@@ -80,7 +80,7 @@ final class RAMCharactersViewModelTests: XCTestCase {
         
         let expectation2 = XCTestExpectation(description: "Wait for characters to be fetched")
         
-        sut.setNextPageIfExists()
+        sut.setNextCharactersPageIfExists()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             XCTAssertEqual(self.sut.currentPage, 2)

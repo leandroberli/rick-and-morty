@@ -35,7 +35,7 @@ struct RAMCHaractersListView: View {
                                 characterGridItemView(character: character)
                                     .onAppear {
                                         if character.id == viewModel.characters.last?.id {
-                                            viewModel.setNextPageIfExists()
+                                            viewModel.setNextCharactersPageIfExists()
                                         }
                                     }
                             })
@@ -53,7 +53,7 @@ struct RAMCHaractersListView: View {
             .searchable(text: $viewModel.searchString , prompt: Text("Type name"))
         }
         .onAppear {
-            viewModel.setCharacters()
+            viewModel.setCharactersFirstPage()
         }
         .accentColor(Color(uiColor: .label))
     }

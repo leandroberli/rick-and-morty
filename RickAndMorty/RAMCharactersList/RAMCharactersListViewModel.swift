@@ -34,7 +34,7 @@ final class RAMCharactersListViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    public func setCharacters() {
+    public func setCharactersFirstPage() {
         fetchCharacters(handleResponseBlock: { [weak self] response in
             guard let self = self else {
                 return
@@ -44,7 +44,7 @@ final class RAMCharactersListViewModel: ObservableObject {
         })
     }
     
-    public func setNextPageIfExists() {
+    public func setNextCharactersPageIfExists() {
         guard let response = response, currentPage < response.info.pages else {
             return
         }
