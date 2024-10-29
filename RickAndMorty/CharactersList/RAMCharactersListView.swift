@@ -30,11 +30,11 @@ struct RAMCHaractersListView: View {
                     LazyVGrid(columns: columns, spacing: 8) {
                         ForEach(viewModel.characters, id: \.self) { character in
                             NavigationLink(destination: {
-                                RAMCharacterDetailView(character: character)
+                                RAMCharacterDetailView(character: character.data)
                             }, label: {
-                                characterGridItemView(character: character)
+                                characterGridItemView(character: character.data)
                                     .onAppear {
-                                        if character.id == viewModel.characters.last?.id {
+                                        if character.data.id == viewModel.characters.last?.data.id {
                                             viewModel.setNextCharactersPageIfExists()
                                         }
                                     }
@@ -73,15 +73,18 @@ struct RAMCHaractersListView: View {
                 HStack {
                     Text(character.name)
                         .font(.system(size: 16, weight: .semibold))
-                        .lineLimit(1)
+                        .lineLimit(2)
                     Spacer()
-                    Text(character.status.rawValue)
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(character.status.labelColor)
+                    Button(action: {
+                        viewModel.toggleFavorite(character: character)
+                    }, label: {
+                        UserDefaults.standard.bool(forKey: "\(character.id)") ? Image(systemName: "heart.fill") : Image(systemName: "heart")
+                    })
+                    .tint(.green)
                 }
-                Text(character.species)
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundStyle(Color(uiColor: .secondaryLabel))
+//                Text(character.species)
+//                    .font(.system(size: 12, weight: .regular))
+//                    .foregroundStyle(Color(uiColor: .secondaryLabel))
             }
             .padding([.leading, .bottom, .trailing], 8)
         }

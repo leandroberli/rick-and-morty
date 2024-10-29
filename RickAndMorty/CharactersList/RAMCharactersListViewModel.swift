@@ -9,7 +9,7 @@ import Combine
 
 final class RAMCharactersListViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
-    @Published public var characters: [Character] = []
+    @Published public var characters: [FavoritableCharacter] = []
     @Published public var searchString: String = ""
     @Published var noSearchResults: Bool = false
     private var prevSearchString: String = ""
@@ -40,7 +40,7 @@ final class RAMCharactersListViewModel: ObservableObject {
                 return
             }
             self.response = response
-            self.characters = response.results
+            self.characters = response.results.map({ FavoritableCharacter(data: $0) })
         })
     }
     
@@ -52,7 +52,7 @@ final class RAMCharactersListViewModel: ObservableObject {
         fetchCharacters(handleResponseBlock: { [weak self] newPageResponse in
             guard let self = self else { return }
             self.response = newPageResponse
-            self.characters.append(contentsOf: newPageResponse.results)
+            self.characters.append(contentsOf: newPageResponse.results.map({ FavoritableCharacter(data: $0) }))
         })
     }
     
@@ -63,8 +63,14 @@ final class RAMCharactersListViewModel: ObservableObject {
                 guard let self = self else { return }
                 self.prevSearchString = self.searchString
                 self.response = response
-                self.characters = response.results
+                self.characters = response.results.map({ FavoritableCharacter(data: $0) })
             })
+        }
+    }
+    
+    public func toggleFavorite(character: Character) {
+        if let index = characters.firstIndex(where: { $0.data.id == character.id }) {
+            characters[index].isFavorite = !characters[index].isFavorite
         }
     }
     

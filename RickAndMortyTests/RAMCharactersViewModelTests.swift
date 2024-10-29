@@ -33,7 +33,6 @@ func loadJson(filename fileName: String) -> GetAllCharactersResponse? {
 
 
 final class RAMCharactersViewModelTests: XCTestCase {
-    
     var sut: RAMCharactersListViewModel!
     var mockCharactersService: MockRAMCharactersService!
     
@@ -93,12 +92,14 @@ final class RAMCharactersViewModelTests: XCTestCase {
     func testSearchingByNameOKResponse() throws {
         let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
         
+        //Setup search status
         sut.searchString = "Rick"
         sut.searchCharacters()
         
+        //Wait to fetch
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             XCTAssertFalse(self.sut.characters.isEmpty)
-            XCTAssertTrue(self.sut.characters.first!.name.contains("Rick"))
+            XCTAssertTrue(self.sut.characters.first!.data.name.contains("Rick"))
             expectation.fulfill()
         }
         
@@ -108,12 +109,67 @@ final class RAMCharactersViewModelTests: XCTestCase {
     func testSearchingByNameBadResponse() throws {
         let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
         
+        //Setup search status
         sut.searchString = "Rick"
         sut.searchCharacters()
         
+        //Wait to fetch
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             XCTAssertFalse(self.sut.characters.isEmpty)
-            XCTAssertFalse(self.sut.characters.first!.name.contains("Morty"))
+            XCTAssertFalse(self.sut.characters.first!.data.name.contains("Morty"))
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5)
+    }
+    
+    func testFavoriteCharactersShouldBeStoraged() throws {
+        XCTAssertTrue(sut.characters.isEmpty)
+        
+        //Set first characters page
+        sut.setCharactersFirstPage()
+        
+        let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
+        
+        //Wait to fetch
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            XCTAssertFalse(self.sut.characters.isEmpty)
+            XCTAssertNotEqual(self.sut.characters.count, 0)
+            
+            //Set favorite
+            let randomChar = self.sut.characters.randomElement()!.data
+            self.sut.toggleFavorite(character: randomChar)
+            
+            XCTAssertTrue(UserDefaults.standard.bool(forKey: "\(randomChar.id)"))
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5)
+    }
+    
+    func testFavoriteAndUnfavoritedShouldRemoveStorage() throws {
+        XCTAssertTrue(sut.characters.isEmpty)
+        
+        //Set first characters page
+        sut.setCharactersFirstPage()
+        
+        let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
+        
+        //Wait to fetch
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            XCTAssertFalse(self.sut.characters.isEmpty)
+            XCTAssertNotEqual(self.sut.characters.count, 0)
+            
+            //Add to favorite
+            let randomChar = self.sut.characters.randomElement()!.data
+            
+            self.sut.toggleFavorite(character: randomChar)
+            XCTAssertTrue(UserDefaults.standard.bool(forKey: "\(randomChar.id)"))
+            
+            //Remove to favorite
+            self.sut.toggleFavorite(character: randomChar)
+            XCTAssertFalse(UserDefaults.standard.bool(forKey: "\(randomChar.id)"))
+            
             expectation.fulfill()
         }
         
