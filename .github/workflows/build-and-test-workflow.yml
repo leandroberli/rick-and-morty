@@ -1,22 +1,33 @@
-name: Build and test
+name: iOS CI
 
 on:
-  push:
-    branches: ["main"]
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
-  build_project:
-    runs-on: macos-latest
+  test:
+    name: Run Xcode Tests
+    runs-on: macos-15
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Build and Test
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Install dependencies
         run: |
-          xcodebuild \
-           -project RickAndMorty.xcodeproj \
-           -scheme RickAndMorty \
-           -sdk iphonesimulator \
-           -destination 'platform=iOS Simulator,name=iPhone 16,OS=16.6' \
-            test || exit 1
+          brew install cocoapods
+          pod install || true
+
+      - name: Build and test
+        run: |
+          xcodebuild -project RickAndMorty.xcodeproj \
+                     -scheme TestCICD \
+                     -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
+                     clean test
