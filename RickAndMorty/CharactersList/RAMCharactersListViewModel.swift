@@ -14,8 +14,7 @@ final class RAMCharactersListViewModel: ObservableObject {
     @Published var noSearchResults: Bool = false
     private var prevSearchString: String = ""
     private var charactersService: RAMCharactersServiceProtocol
-    private var response: GetAllCharactersResponse?
-    var currentPage = 1
+    public var paginationManager: PaginationManager = PaginationManager()
     
     init(charactersService: RAMCharactersServiceProtocol = RAMCharactersService()) {
         self.charactersService = charactersService
@@ -35,23 +34,23 @@ final class RAMCharactersListViewModel: ObservableObject {
     }
     
     public func setCharactersFirstPage() {
+        self.paginationManager.reset()
         fetchCharacters(handleResponseBlock: { [weak self] response in
             guard let self = self else {
                 return
             }
-            self.response = response
+            self.paginationManager.setTotalPages(response.info.pages)
             self.characters = response.results.map({ FavoritableCharacter(data: $0) })
         })
     }
     
     public func setNextCharactersPageIfExists() {
-        guard let response = response, currentPage < response.info.pages else {
+        guard paginationManager.canLoadMore else {
             return
         }
-        currentPage += 1
+        paginationManager.advancePage()
         fetchCharacters(handleResponseBlock: { [weak self] newPageResponse in
             guard let self = self else { return }
-            self.response = newPageResponse
             self.characters.append(contentsOf: newPageResponse.results.map({ FavoritableCharacter(data: $0) }))
         })
     }
@@ -62,7 +61,7 @@ final class RAMCharactersListViewModel: ObservableObject {
             fetchCharacters(handleResponseBlock: { [weak self] response in
                 guard let self = self else { return }
                 self.prevSearchString = self.searchString
-                self.response = response
+                self.paginationManager.setTotalPages(response.info.pages)
                 self.characters = response.results.map({ FavoritableCharacter(data: $0) })
             })
         }
@@ -75,13 +74,12 @@ final class RAMCharactersListViewModel: ObservableObject {
     }
     
     private func resetToNewSearch() {
-        self.prevSearchString = searchString
-        self.currentPage = 1
-        self.response = nil
+        prevSearchString = searchString
+        paginationManager.reset()
     }
     
     private func fetchCharacters(handleResponseBlock: @escaping (GetAllCharactersResponse) -> Void) {
-        charactersService.fetchCharacters(page: currentPage, name: searchString)
+        charactersService.fetchCharacters(page: paginationManager.currentPage, name: searchString)
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] result in
                 guard let self = self else { return }
@@ -100,4 +98,6 @@ final class RAMCharactersListViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 }
+
+
 
