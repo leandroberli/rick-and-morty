@@ -82,7 +82,7 @@ final class RAMCharactersViewModelTests: XCTestCase {
         sut.setNextCharactersPageIfExists()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            XCTAssertEqual(self.sut.currentPage, 2)
+            XCTAssertEqual(self.sut.paginationManager.currentPage, 2)
             expectation2.fulfill()
         }
         
