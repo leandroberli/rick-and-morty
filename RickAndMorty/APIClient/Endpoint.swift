@@ -28,17 +28,39 @@ enum APIError: Error {
     case invalidData
 }
 
+enum RickAndMortyURLConfiguration {
+    case production
+    case uiTestsLocalhost
+    
+    var host: String {
+        switch self {
+        case .production:
+            "rickandmortyapi.com"
+        case .uiTestsLocalhost:
+            "localhost"
+        }
+    }
+}
+
 enum RickAndMortyEndpoint: APIEndpoint {
     case getAllCharacters(page: Int?, name: String?)
     
     var baseURL: URL {
+        let isMockServerUITesting = ProcessInfo.processInfo.arguments.contains("-mockServer")
         var components = URLComponents()
-        components.scheme = "https"
-        components.host = "rickandmortyapi.com"
+        if isMockServerUITesting {
+            components.scheme = "http"
+            components.host = RickAndMortyURLConfiguration.uiTestsLocalhost.host
+            components.port = 8888
+        } else {
+            components.scheme = "https"
+            components.host = RickAndMortyURLConfiguration.production.host
+        }
         components.path = path
         if let params = parameters {
             components.queryItems = params.map( { URLQueryItem(name: $0.key, value: "\($0.value)" ) } )
         }
+        
         return components.url!
     }
     

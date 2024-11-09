@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9A8632802CDF610A00989CF8 /* Swifter in Frameworks */ = {isa = PBXBuildFile; productRef = 9A86327F2CDF610A00989CF8 /* Swifter */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		9AAD77962CCBB85D00DB73BE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +33,29 @@
 		9AAD779F2CCBB85D00DB73BE /* RickAndMortyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RickAndMortyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9A8632842CDF6DE700989CF8 /* Exceptions for "RickAndMortyUITests" folder in "RickAndMortyUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9AAD779E2CCBB85D00DB73BE /* RickAndMortyUITests */;
+		};
+		9A8632E42CDF796400989CF8 /* Exceptions for "RickAndMorty" folder in "RickAndMorty" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9AAD77842CCBB85B00DB73BE /* RickAndMorty */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9AAD77872CCBB85B00DB73BE /* RickAndMorty */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9A8632E42CDF796400989CF8 /* Exceptions for "RickAndMorty" folder in "RickAndMorty" target */,
+			);
 			path = RickAndMorty;
 			sourceTree = "<group>";
 		};
@@ -42,6 +66,9 @@
 		};
 		9AAD77A22CCBB85D00DB73BE /* RickAndMortyUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9A8632842CDF6DE700989CF8 /* Exceptions for "RickAndMortyUITests" folder in "RickAndMortyUITests" target */,
+			);
 			path = RickAndMortyUITests;
 			sourceTree = "<group>";
 		};
@@ -66,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A8632802CDF610A00989CF8 /* Swifter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +186,7 @@
 			);
 			name = RickAndMortyUITests;
 			packageProductDependencies = (
+				9A86327F2CDF610A00989CF8 /* Swifter */,
 			);
 			productName = RickAndMortyUITests;
 			productReference = 9AAD779F2CCBB85D00DB73BE /* RickAndMortyUITests.xctest */;
@@ -195,6 +224,9 @@
 			);
 			mainGroup = 9AAD777C2CCBB85B00DB73BE;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9A86327E2CDF610A00989CF8 /* XCRemoteSwiftPackageReference "swifter" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9AAD77862CCBB85B00DB73BE /* Products */;
 			projectDirPath = "";
@@ -399,6 +431,8 @@
 				DEVELOPMENT_TEAM = FW8H8GHAA2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RickAndMorty/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -429,6 +463,8 @@
 				DEVELOPMENT_TEAM = FW8H8GHAA2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RickAndMorty/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -493,6 +529,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FW8H8GHAA2;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RickAndMortyUITests/Info.plist;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = leandroberli.RickAndMortyUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -510,6 +547,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FW8H8GHAA2;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RickAndMortyUITests/Info.plist;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = leandroberli.RickAndMortyUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -560,6 +598,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9A86327E2CDF610A00989CF8 /* XCRemoteSwiftPackageReference "swifter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/httpswift/swifter.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9A86327F2CDF610A00989CF8 /* Swifter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9A86327E2CDF610A00989CF8 /* XCRemoteSwiftPackageReference "swifter" */;
+			productName = Swifter;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9AAD777D2CCBB85B00DB73BE /* Project object */;
 }
