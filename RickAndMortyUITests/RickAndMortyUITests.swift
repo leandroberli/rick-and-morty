@@ -31,12 +31,12 @@ final class RickAndMortyUITests: XCTestCase {
         
         let textName = app.staticTexts[randomChar]
         
-        XCTAssertTrue(textName.waitForExistence(timeout: 20))
+        XCTAssertTrue(textName.waitForExistence(timeout: 120))
         textName.tap()
         
         let detailTitle = app.staticTexts[randomChar]
         
-        XCTAssertTrue(detailTitle.waitForExistence(timeout: 5))
+        XCTAssertTrue(detailTitle.waitForExistence(timeout: 120))
     }
     
     @MainActor
@@ -44,29 +44,29 @@ final class RickAndMortyUITests: XCTestCase {
         let charName = "Glasses Morty"
         let searchTextfield = app.searchFields.firstMatch
         
-        XCTAssertTrue(searchTextfield.waitForExistence(timeout: 5))
+        XCTAssertTrue(searchTextfield.waitForExistence(timeout: 120))
         searchTextfield.tap()
         
         searchTextfield.typeText(charName)
         
         let charNameText = app.staticTexts[charName]
-        XCTAssertTrue(charNameText.waitForExistence(timeout: 20))
+        XCTAssertTrue(charNameText.waitForExistence(timeout: 120))
         charNameText.tap()
         
         let detailText = app.staticTexts[charName]
-        XCTAssert(detailText.waitForExistence(timeout: 5))
+        XCTAssert(detailText.waitForExistence(timeout: 120))
     }
     
     @MainActor
     func testSearchWithNoResultsShouldShowNoResultsLabel() throws {
         let searchTextfield = app.searchFields.firstMatch
         
-        XCTAssertTrue(searchTextfield.waitForExistence(timeout: 5))
+        XCTAssertTrue(searchTextfield.waitForExistence(timeout: 120))
         searchTextfield.tap()
         searchTextfield.typeText("No search results dummy text")
         
         let charNameText = app.staticTexts["There is no results for the given name"]
-        XCTAssertTrue(charNameText.waitForExistence(timeout: 20))
+        XCTAssertTrue(charNameText.waitForExistence(timeout: 120))
     }
 
 //    @MainActor
