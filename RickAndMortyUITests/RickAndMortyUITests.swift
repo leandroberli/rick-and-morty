@@ -26,7 +26,6 @@ final class RickAndMortyUITests: XCTestCase {
 
     @MainActor
     func testNavigationToRandomCharacterDetail() throws {
-        app.launch()
         let charsName = ["Beth Smith", "Summer Smith", "Morty Smith", "Rick Sanchez"]
         let randomChar = charsName.randomElement()!
         
