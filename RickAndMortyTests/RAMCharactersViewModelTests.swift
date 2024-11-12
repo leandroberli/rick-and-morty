@@ -126,21 +126,23 @@ final class RAMCharactersViewModelTests: XCTestCase {
     func testFavoriteCharactersShouldBeStoraged() throws {
         XCTAssertTrue(sut.characters.isEmpty)
         
-        //Set first characters page
         sut.setCharactersFirstPage()
         
         let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
         
-        //Wait to fetch
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             XCTAssertFalse(self.sut.characters.isEmpty)
-            XCTAssertNotEqual(self.sut.characters.count, 0)
             
-            //Set favorite
-            let randomChar = self.sut.characters.randomElement()!.data
-            self.sut.toggleFavorite(character: randomChar)
+            //TODO: TMP Fix
+            let rickFavCharacter = self.sut.characters[0]
+            //Force remove to defualts to success test
+            UserDefaults.standard.set(nil, forKey: "\(rickFavCharacter.data.id)")
             
-            XCTAssertTrue(UserDefaults.standard.bool(forKey: "\(randomChar.id)"))
+            XCTAssertFalse(rickFavCharacter.isFavorite)
+            
+            self.sut.toggleFavorite(character: rickFavCharacter.data)
+            
+            XCTAssertTrue(UserDefaults.standard.bool(forKey: "\(rickFavCharacter.data.id)"))
             expectation.fulfill()
         }
         
@@ -150,7 +152,6 @@ final class RAMCharactersViewModelTests: XCTestCase {
     func testFavoriteAndUnfavoritedShouldRemoveStorage() throws {
         XCTAssertTrue(sut.characters.isEmpty)
         
-        //Set first characters page
         sut.setCharactersFirstPage()
         
         let expectation = XCTestExpectation(description: "Wait for characters to be fetched")
@@ -161,26 +162,26 @@ final class RAMCharactersViewModelTests: XCTestCase {
             XCTAssertNotEqual(self.sut.characters.count, 0)
             
             //Add to favorite
-            let randomChar = self.sut.characters.randomElement()!.data
+            let mortyCharacter = self.sut.characters[1].data
             
-            self.sut.toggleFavorite(character: randomChar)
-            XCTAssertTrue(UserDefaults.standard.bool(forKey: "\(randomChar.id)"))
+            self.sut.toggleFavorite(character: mortyCharacter)
+            XCTAssertTrue(UserDefaults.standard.bool(forKey: "\(mortyCharacter.id)"))
             
             //Remove to favorite
-            self.sut.toggleFavorite(character: randomChar)
-            XCTAssertFalse(UserDefaults.standard.bool(forKey: "\(randomChar.id)"))
+            self.sut.toggleFavorite(character: mortyCharacter)
+            XCTAssertFalse(UserDefaults.standard.bool(forKey: "\(mortyCharacter.id)"))
             
             expectation.fulfill()
         }
         
         wait(for: [expectation], timeout: 5)
     }
-    
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+//    
+//    func testPerformanceExample() throws {
+//        // This is an example of a performance test case.
+//        self.measure {
+//            // Put the code you want to measure the time of here.
+//        }
+//    }
     
 }

@@ -27,6 +27,7 @@
 		9AAD77852CCBB85B00DB73BE /* RickAndMorty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickAndMorty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AAD77952CCBB85D00DB73BE /* RickAndMortyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RickAndMortyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AAD779F2CCBB85D00DB73BE /* RickAndMortyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RickAndMortyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AFC5A7D2CE292F8000C23C5 /* RickAndMorty.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RickAndMorty.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +76,7 @@
 		9AAD777C2CCBB85B00DB73BE = {
 			isa = PBXGroup;
 			children = (
+				9AFC5A7D2CE292F8000C23C5 /* RickAndMorty.xctestplan */,
 				9AAD77872CCBB85B00DB73BE /* RickAndMorty */,
 				9AAD77982CCBB85D00DB73BE /* RickAndMortyTests */,
 				9AAD77A22CCBB85D00DB73BE /* RickAndMortyUITests */,
