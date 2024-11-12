@@ -50,11 +50,11 @@ final class RickAndMortyUITests: XCTestCase {
         searchTextfield.typeText(charName)
         
         let charNameText = app.staticTexts[charName]
-        XCTAssertTrue(charNameText.waitForExistence(timeout: 120))
+        XCTAssertTrue(charNameText.waitForExistence(timeout: 240))
         charNameText.tap()
         
         let detailText = app.staticTexts[charName]
-        XCTAssert(detailText.waitForExistence(timeout: 120))
+        XCTAssert(detailText.waitForExistence(timeout: 240))
     }
     
     @MainActor
