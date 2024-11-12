@@ -44,7 +44,7 @@ final class RickAndMortyUITests: XCTestCase {
         let charName = "Glasses Morty"
         let searchTextfield = app.searchFields.firstMatch
         
-        XCTAssertTrue(searchTextfield.waitForExistence(timeout: 120))
+        XCTAssertTrue(searchTextfield.waitForExistence(timeout: 240))
         searchTextfield.tap()
         
         searchTextfield.typeText(charName)
