@@ -12,44 +12,7 @@ struct AllCharactersListView: View {
     @State var searchText: String = ""
     
     var body: some View {
-        TabView {
-            NavigationView {
-                ScrollView {
-                    if !viewModel.noSearchResults {
-                        CharacterGridView(characters: viewModel.characters, item: { char in
-                            FavoritableCharacterItemView(character: char,
-                                                         toggleFavoriteAction: { char in
-                                viewModel.toggleFavorite(character: char.data)
-                            })
-                        }, navigationLinkDestination: { character in
-                            if let index = viewModel.characters.firstIndex(of: character) {
-                                return RAMCharacterDetailView(character: $viewModel.characters[index])
-                            } else {
-                                return RAMCharacterDetailView(character: .constant(FavoritableCharacter.placeholder))
-                            }
-                        }, tryFetchNextPage: {
-                            viewModel.setNextCharactersPageIfExists()
-                        })
-                    } else {
-                        noSearchResultsView
-                    }
-                }
-                .navigationTitle("Characters")
-                .searchable(text: $viewModel.searchString , prompt: Text("Type name"))
-            }
-            .onAppear {
-                viewModel.setCharactersFirstPage()
-            }
-            .tabItem {
-                Label("All", systemImage: "person")
-            }
-            
-            FavoritesView()
-            .tabItem {
-                    Label("Favs", systemImage: "heart")
-            }
-        }
-        .accentColor(Color(uiColor: .label))
+        allCharactersView
     }
     
     private var noSearchResultsView: some View {
@@ -59,4 +22,42 @@ struct AllCharactersListView: View {
                 .padding(.top, 32)
         }
     }
+    
+    private var allCharactersView: some View {
+        NavigationView {
+            ScrollView {
+                if !viewModel.noSearchResults {
+                    CharacterGridView(characters: viewModel.characters, item: { char in
+                        FavoritableCharacterItemView(character: char,
+                                                     toggleFavoriteAction: { char in
+                            viewModel.toggleFavorite(character: char.data)
+                        })
+                    }, navigationLinkDestination: { character in
+                        if let index = viewModel.characters.firstIndex(of: character) {
+                            return RAMCharacterDetailView(character: $viewModel.characters[index])
+                        } else {
+                            return RAMCharacterDetailView(character: .constant(FavoritableCharacter.placeholder))
+                        }
+                    }, tryFetchNextPage: {
+                        viewModel.setNextCharactersPageIfExists()
+                    })
+                } else {
+                    noSearchResultsView
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: { SettingsView() }, label: {
+                        Image(systemName: "gearshape.fill")
+                    })
+                }
+            }
+            .navigationTitle("Characters")
+            .searchable(text: $viewModel.searchString , prompt: Text("Type name"))
+        }
+        .onAppear {
+            viewModel.setCharactersFirstPage()
+        }
+    }
 }
+

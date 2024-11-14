@@ -39,6 +39,7 @@ struct CharacterGridView<Item: View, DetailDestination: View>: View {
                             }
                         }
                 })
+                .accessibilityIdentifier(character.data.name + "-cell")
                 .buttonStyle(.plain)
                 .background(Color(uiColor: .secondarySystemGroupedBackground))
                 .cornerRadius(8)

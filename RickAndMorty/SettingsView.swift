@@ -1,0 +1,33 @@
+//
+//  SettingsView.swift
+//  RickAndMorty
+//
+//  Created by Leandro Berli on 14/11/2024.
+//
+
+import SwiftUI
+
+struct SettingsView: View {
+    @EnvironmentObject var settings: Settings
+    
+    var body: some View {
+        List {
+            HStack {
+                Text("Dark mode")
+                Toggle("", isOn: $settings.isDarkMode)
+                    .onChange(of: settings.isDarkMode) {
+                        UserDefaults.standard.set(settings.isDarkMode, forKey: "isDarkMode")
+                    }
+            }
+            
+        }
+        Text("Developed by Leandro Berli.\nPowered by https://rickandmortyapi.com/")
+            .font(.system(size: 12, weight: .regular))
+            .foregroundStyle(.secondary)
+            .padding()
+        .navigationTitle("Settings")
+        .environment(\.colorScheme, settings.isDarkMode ? .dark : .light)
+        .environmentObject(settings)
+        
+    }
+}

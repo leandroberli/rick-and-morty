@@ -47,6 +47,7 @@ struct FavoritableCharacterItemView: View {
                         UserDefaults.standard.bool(forKey: "\(character.id)") ? Image(systemName: "heart.fill") : Image(systemName: "heart")
                     })
                     .tint(.green)
+                    .accessibilityIdentifier(character.name + "-favorite-button")
                 }
             }
             .padding([.leading, .trailing], 8)

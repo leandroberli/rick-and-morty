@@ -13,6 +13,8 @@ final class RickAndMortyUITests: XCTestCase {
 
     override func setUpWithError() throws {
         app = XCUIApplication()
+        //Argument used to clean defaults.
+        app.launchArguments += ["UI-Testing"]
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
@@ -67,6 +69,23 @@ final class RickAndMortyUITests: XCTestCase {
         
         let charNameText = app.staticTexts["There is no results for the given name"]
         XCTAssertTrue(charNameText.waitForExistence(timeout: 120))
+    }
+    
+    @MainActor
+    func testAddFavoriteAndCheckIfExistsInFavoriteList() throws {
+        //Add Rick to favorite.
+        let rickFavoriteButton = app.buttons["Rick Sanchez-favorite-button"]
+        XCTAssertTrue(rickFavoriteButton.waitForExistence(timeout: 120))
+        
+        rickFavoriteButton.tap()
+        
+        //Navigate to fav section
+        let favoriteTabButton = app.tabBars["Tab Bar"].buttons["Favs"]
+        favoriteTabButton.tap()
+        
+        //Navigate to rick detail
+        let rickCell = app.buttons["Rick Sanchez-cell"]
+        XCTAssertTrue(rickCell.waitForExistence(timeout: 5))
     }
 
 //    @MainActor
