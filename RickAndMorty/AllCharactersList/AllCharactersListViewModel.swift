@@ -19,6 +19,7 @@ final class AllCharactersListViewModel: ObservableObject {
     init(charactersService: RAMCharactersServiceProtocol = RAMCharactersService()) {
         self.charactersService = charactersService
         bindSearchText()
+        setCharactersFirstPage()
     }
     
     private func bindSearchText() {

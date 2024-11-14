@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct FavoritableCharacterItemView: View {
+    @EnvironmentObject var settings: Settings
+    
     var character: FavoritableCharacter
     
     let toggleFavoriteAction: (FavoritableCharacter) -> Void
@@ -46,7 +48,7 @@ struct FavoritableCharacterItemView: View {
                     }, label: {
                         UserDefaults.standard.bool(forKey: "\(character.id)") ? Image(systemName: "heart.fill") : Image(systemName: "heart")
                     })
-                    .tint(.green)
+                    .tint(Color(uiColor: UIColor.customPrimary2))
                     .accessibilityIdentifier(character.name + "-favorite-button")
                 }
             }
@@ -55,5 +57,9 @@ struct FavoritableCharacterItemView: View {
         }
         .frame(width: itemWidth, height: itemHeight)
         .clipped()
+        .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(settings.isDarkMode ? .clear : Color(uiColor: .lightGray), lineWidth: 0.5)
+            )
     }
 }

@@ -21,13 +21,10 @@ struct SettingsView: View {
             }
             
         }
-        Text("Developed by Leandro Berli.\nPowered by https://rickandmortyapi.com/")
+        Text("Developed by Leandro Berli.\nPowered by https://rickandmortyapi.com/\nv\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")(\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""))")
             .font(.system(size: 12, weight: .regular))
             .foregroundStyle(.secondary)
             .padding()
         .navigationTitle("Settings")
-        .environment(\.colorScheme, settings.isDarkMode ? .dark : .light)
-        .environmentObject(settings)
-        
     }
 }

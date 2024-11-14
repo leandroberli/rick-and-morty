@@ -52,11 +52,8 @@ struct AllCharactersListView: View {
                     })
                 }
             }
-            .navigationTitle("Characters")
+            .navigationTitle("🚀 Characters")
             .searchable(text: $viewModel.searchString , prompt: Text("Type name"))
-        }
-        .onAppear {
-            viewModel.setCharactersFirstPage()
         }
     }
 }
