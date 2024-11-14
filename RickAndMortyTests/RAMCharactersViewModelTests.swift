@@ -33,12 +33,12 @@ func loadJson(filename fileName: String) -> GetAllCharactersResponse? {
 
 
 final class RAMCharactersViewModelTests: XCTestCase {
-    var sut: RAMCharactersListViewModel!
+    var sut: AllCharactersListViewModel!
     var mockCharactersService: MockRAMCharactersService!
     
     override func setUpWithError() throws {
         mockCharactersService = MockRAMCharactersService()
-        sut = RAMCharactersListViewModel(charactersService: mockCharactersService)
+        sut = AllCharactersListViewModel(charactersService: mockCharactersService)
     }
     
     override func tearDownWithError() throws {

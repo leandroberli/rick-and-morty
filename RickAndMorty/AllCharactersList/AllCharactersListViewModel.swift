@@ -7,7 +7,7 @@
 import Foundation
 import Combine
 
-final class RAMCharactersListViewModel: ObservableObject {
+final class AllCharactersListViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     @Published public var characters: [FavoritableCharacter] = []
     @Published public var searchString: String = ""
