@@ -32,6 +32,15 @@ struct ContentView: View {
     }
 }
 
+extension UINavigationController {
+
+  open override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    navigationBar.topItem?.backButtonDisplayMode = .minimal
+  }
+
+}
+
 #Preview {
     ContentView()
 }
