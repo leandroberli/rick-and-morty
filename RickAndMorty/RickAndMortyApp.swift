@@ -12,6 +12,11 @@ struct RickAndMortyApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    if ProcessInfo.processInfo.arguments.contains("UI-Testing") {
+                        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+                    }
+                }
         }
     }
 }

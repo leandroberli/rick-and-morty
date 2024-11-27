@@ -7,7 +7,7 @@
 import Foundation
 import Combine
 
-final class RAMCharactersListViewModel: ObservableObject {
+final class AllCharactersListViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     @Published public var characters: [FavoritableCharacter] = []
     @Published public var searchString: String = ""
@@ -19,6 +19,7 @@ final class RAMCharactersListViewModel: ObservableObject {
     init(charactersService: RAMCharactersServiceProtocol = RAMCharactersService()) {
         self.charactersService = charactersService
         bindSearchText()
+        setCharactersFirstPage()
     }
     
     private func bindSearchText() {
