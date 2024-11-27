@@ -15,13 +15,14 @@ public struct Character: Codable, Hashable {
     let gender: String
     let episode: [String]
     
-    var episodeToString: String {
-        let episodeNumbers = episode.map( { $0.replacingOccurrences(of: "https://rickandmortyapi.com/api/episode/", with: "")  })
-        return episodeNumbers.joined(separator: ", ")
-    }
-
     var idString: String {
         String(id)
+    }
+}
+
+extension String {
+    func formatURLEpisodeToLabelString() -> String {
+        return "Episode " + self.replacingOccurrences(of: "https://rickandmortyapi.com/api/episode/", with: "")
     }
 }
 

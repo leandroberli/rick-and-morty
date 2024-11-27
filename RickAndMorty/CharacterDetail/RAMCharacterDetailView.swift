@@ -107,8 +107,18 @@ struct RAMCharacterDetailView: View {
                     Text(character.data.gender)
                         .font(.system(size: 16, weight: .medium))
                 case .episodes:
-                    Text(character.data.episodeToString)
-                        .font(.system(size: 16, weight: .medium))
+                    ForEach(character.data.episode.indices, id: \.self) { index in
+                        HStack {
+                            Text(character.data.episode[index].formatURLEpisodeToLabelString())
+                            Spacer()
+                            Button(action: {}, label: {
+                                Image(systemName: "chevron.right")
+                            })
+                        }
+                        .padding([.top, .bottom], 4)
+                        .background(index % 2 == 0 ? .red : .green)
+                    }
+                    
                 }
             }
             .padding(.bottom, 8)
